@@ -21,14 +21,9 @@ class TicketController < ApplicationController
      # :layout => :main
    end
 
-
-   # url = "https://moylen.zendesk.com/api/v2/tickets.json"
-   # auth =  username: "moylengreen@hotmail.com", password: "table1"
-   # header = 'Content-Type' => 'application/json'
-
   def api_get_tickets
-    response = HTTParty.get("https://moylen.zendesk.com/api/v2/tickets.json", basic_auth: {username: "moylengreen@hotmail.com",
-    password: "table1" }, :headers =>{'Content-Type' => 'application/json'} )
+    response = HTTParty.get("url", basic_auth: {username: "usr",
+    password: "password" }, :headers =>{'Content-Type' => 'application/json'} )
     if response.success?
        res = response.parsed_response
        t = res["tickets"]

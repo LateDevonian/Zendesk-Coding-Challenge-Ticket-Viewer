@@ -49,9 +49,7 @@ RSpec.describe TicketController do
   describe 'it gets posts available and parses them' do
     let(:response) {apitick.get_request(url)}
   end
-  # let(:url) { "https://moylen.zendesk.com/api/v2/tickets.json" }
- # let(:usrname) { "moylengreen@hotmail.com" }
- # let(:password) { "table1" }
+
    # let(:ticketController) {TicketController.new}
  # let(:api) {TicketController.new}
     # it 'returns the first post' do
@@ -103,9 +101,7 @@ RSpec.describe TicketController do
 
 
   # describe 'it raises errors when invalid urls supplied'  do
-  #   let(:url) { "https://moylen.zendesk.com/api/v2/tickets.json" }
-  #   let(:usrname) { "moylengreen@hotmail.com" }
-  #   let(:password) { "table1" }
+
   #
   #   result = api_get_tickets(url, usrname, password)
   #
