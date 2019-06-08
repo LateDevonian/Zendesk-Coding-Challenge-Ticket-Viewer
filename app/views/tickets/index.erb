@@ -1,0 +1,36 @@
+<html>
+  <body>
+    <h1>Ticket viewer</h1>
+    <p>have 25 tickets</p>
+
+    <% if @tickets.present? %>
+    <br>
+    <%= will_paginate @tickets %>
+    <br>
+      <table>
+        <thead>
+          <tr>
+            <th>Subject</th><th>Description</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <%@tickets.each do |ticket| %>
+          <tr>
+            <td><%= ticket["subject"]%></td><td><%= ticket["description"] %></td><td><%= ticket["id"] %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <br>
+      <%= will_paginate @tickets %>
+      <br>
+
+        <% else %>
+         <p> It seems you have no tickets or soemthing went wrong <p>
+      <% end %>
+
+
+
+  </body>
+</html>

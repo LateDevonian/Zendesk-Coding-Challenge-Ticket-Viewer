@@ -1,0 +1,21 @@
+require 'rspec'
+require 'byebug'
+require 'rack/test'
+# require_relative '../../app/views/tickets/index'
+# require_relative '../../app/views/tickets/show each'
+
+#goinig to need browser test/capy and selenium
+
+  # it 'renders the page formatted correctly'
+  # it 'includes a description of the page'
+  # it 'includes the title of the tickets'
+  # it 'includes a next button if there are more than one tickets'
+  # it 'contains the details of the tickets'
+  # it 'has clickable links on the tickets'
+  # it 'returns full tickets with no next if there are no more tickets'
+  # it 'returns a message if there are no tickets'
+  # it 'returns the details on the ticket if you click a link'
+  # it 'returns a message if there are no tickets'
+  # it 'gracefully handles a failure for the api'
+  # it 'contains paginated ticket details up to 25'
+  # it 'returns the details information of a single ticket'

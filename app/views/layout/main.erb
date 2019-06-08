@@ -1,0 +1,7 @@
+emplates take a second argument, the options hash:
+
+get '/' do
+  erb :index, :layout => :post
+end
+
+This will render views/index.erb embedded in the views/post.erb (default is views/layout.erb, if it exists).
