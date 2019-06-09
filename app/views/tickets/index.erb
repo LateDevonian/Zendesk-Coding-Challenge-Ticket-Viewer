@@ -1,7 +1,7 @@
 <html>
   <body>
-    <h1>Ticket viewer</h1>
-    <p>have 25 tickets</p>
+    <h1>Your tickets</h1>
+    <p>Please click on the ticket to view ticket  <p>
 
     <% if @tickets.present? %>
     <br>
@@ -10,14 +10,14 @@
       <table>
         <thead>
           <tr>
-            <th>Subject</th><th>Description</th>
+            <th>Subject</th>
           </tr>
         </thead>
 
         <tbody>
           <%@tickets.each do |ticket| %>
           <tr>
-            <td><%= ticket["subject"]%></td><td><%= ticket["description"] %></td><td><%= ticket["id"] %></td>
+            <td><a href="/tickets/<%= ticket["id"] %>"><%= ticket["id"] %>&nbsp;<%= ticket["subject"]%></a></td>
           </tr>
           <% end %>
         </tbody>
