@@ -1,6 +1,7 @@
 require 'sinatra/base'
 require 'json'
 require 'byebug'
+require 'yaml'
 require 'httparty'
 require 'will_paginate/array'
 require 'will_paginate/view_helpers/sinatra'
@@ -18,20 +19,27 @@ class TicketController < ApplicationController
      erb :'tickets/show_each'
   end
 
-  private
 
-  def set_request(url)
-    user = "xx"
-    pass = "yy"
+  def set_request(id)
+    config = YAML.safe_load(File.open(File.expand_path('../../../config/config.yml', __FILE__)))
 
-    request = HTTParty.get(url, basic_auth: {username: user,
-    password: pass }, :headers =>{'Content-Type' => 'application/json'} )
+    @base_url = "#{config['environment']}"
+    @user = "#{config['user']}"
+    @pass = "#{config['password']}"
+    @id = id
+
+    if id == 'nil'
+      url = "#{@base_url}/tickets.json"
+      else
+        url = "#{@base_url}/tickets/#{@id}.json"
+    end
+
+    request = HTTParty.get(url, basic_auth: {username: @user,
+    password: @pass }, :headers =>{'Content-Type' => 'application/json'} )
   end
 
-
   def api_get_tickets
-    url = "https://moylen.zendesk.com/api/v2/tickets.json"
-    response = set_request(url)
+    response = set_request('nil')
     if response.success?
        res = response.parsed_response
        t = res["tickets"]
@@ -42,14 +50,11 @@ class TicketController < ApplicationController
   end
 
   def get_ticket_detail(id)
-
-    url = "https://moylen.zendesk.com/api/v2/tickets/#{id}.json"
-    response = set_request(url)
+    response = set_request(id)
 
     if response.success?
        res = response.parsed_response
        t = res["ticket"]
-       #handle errors gracefully
       else
         code = response.code
         error_handling(code)

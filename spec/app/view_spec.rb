@@ -4,7 +4,6 @@ require 'rack/test'
 # require_relative '../../app/views/tickets/index'
 # require_relative '../../app/views/tickets/show each'
 
-#goinig to need browser test/capy and selenium
 
   # it 'renders the page formatted correctly'
   # it 'includes a description of the page'
