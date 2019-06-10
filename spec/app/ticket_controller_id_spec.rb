@@ -1,9 +1,7 @@
+require_relative '../../app/controllers/ticket_controller'
 require 'rspec'
 require 'byebug'
 require 'rack/test'
-require_relative '../../app/controllers/ticket_controller'
-
-
 
 RSpec.describe TicketController do
   include Rack::Test::Methods

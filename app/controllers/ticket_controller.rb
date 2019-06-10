@@ -10,65 +10,63 @@ require_relative './application_controller'
 class TicketController < ApplicationController
 
   get '/tickets' do
-     @tickets = api_get_tickets
-     erb :'/tickets/index'
+    api_get_tickets
+    erb :'/tickets/index'
    end
 
   get '/tickets/:id' do
-     @ticket = get_ticket_detail(params["id"])
-     erb :'tickets/show_each'
+    get_ticket_detail(params["id"])
+    erb :'tickets/show_each'
   end
 
 
-  def set_request(id)
+  def get_request(id = nil)
     config = YAML.safe_load(File.open(File.expand_path('../../../config/config.yml', __FILE__)))
+    base_url = "#{config['environment']}"
+    user = "#{config['user']}"
+    pass = "#{config['password']}"
 
-    @base_url = "#{config['environment']}"
-    @user = "#{config['user']}"
-    @pass = "#{config['password']}"
-    @id = id
-
-    if id == 'nil'
-      url = "#{@base_url}/tickets.json"
-      else
-        url = "#{@base_url}/tickets/#{@id}.json"
+    if id == nil
+      url = "#{base_url}/tickets.json"
+    else
+      url = "#{base_url}/tickets/#{id}.json"
     end
 
-    request = HTTParty.get(url, basic_auth: {username: @user,
-    password: @pass }, :headers =>{'Content-Type' => 'application/json'} )
+    HTTParty.get(url, basic_auth: {username: user,
+    password: pass }, headers: {'Content-Type' => 'application/json'} )
   end
 
   def api_get_tickets
-    response = set_request('nil')
-    if response.success?
-       res = response.parsed_response
-       t = res["tickets"]
-       tickets = t.paginate(:page => params[:page], :per_page => 25)
-      else
-        error_handling(response.code)
+    #not implemented yet zendesk pagination to return >100 tickets
+    raw_response = get_request
+    response = raw_response.parsed_response
+
+    if raw_response.success?
+      tickets = response["tickets"]
+      @tickets = tickets.paginate(:page => params[:page], :per_page => 25)
+    else
+      handle_error(raw_response, response)
     end
   end
 
   def get_ticket_detail(id)
-    response = set_request(id)
+    #only send items that exist not implemented
+    raw_response = get_request(id)
+    response = raw_response.parsed_response
 
-    if response.success?
-       res = response.parsed_response
-       t = res["ticket"]
-      else
-        code = response.code
-        error_handling(code)
-    end
-  end
-
-  def error_handling(code)
-    case code
-    when 404
-      message = "#{code}: Page not found."
-    when 500...600
-      message = "#{code}: Oops! "
+    if raw_response.success?
+       @ticket = response["ticket"]
     else
-      message = "something is terribly wrong!"
+      handle_error(raw_response, response)
     end
   end
+
+  def handle_error(raw_response, response)
+    status(raw_response.code)
+    error = response["error"]
+    description = response["description"]
+
+    @error = "Something went wrong! #{status} - #{error}: #{description} "
+  end
+
 end

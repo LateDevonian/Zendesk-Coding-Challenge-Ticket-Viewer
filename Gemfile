@@ -9,7 +9,6 @@ gem 'rake'
 gem 'require_all' #=> Helps to load dependencies
 gem 'sqlite3'
 gem 'thin'
-gem 'zendesk_api'
 gem 'shotgun'
 gem 'pry'
 gem 'bcrypt'
@@ -17,9 +16,7 @@ gem "tux"
 gem 'rspec-print_failures_eagerly'
 gem 'rest-client', '~> 2.0', '>= 2.0.2'
 gem 'httparty', '~> 0.17.0'
-gem 'rack-flash3'
 gem 'will_paginate', '~> 3.1', '>= 3.1.5'
-gem 'sinatra-flash'
 gem 'coderay', '1.1.2'
 gem 'byebug', '10.0.2'
 

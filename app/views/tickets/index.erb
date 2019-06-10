@@ -1,10 +1,11 @@
-<html>
-  <body>
-    <h1>Your tickets</h1>
+<% if @error %>
+  <h3><%= @error %></h3>
+<%end%>
+
+<% if @tickets %>
+  <h1>Your tickets</h1>
     <p>Please click on the ticket to view ticket  <p>
 
-    <% if @tickets.present? %>
-    <br>
     <%= will_paginate @tickets %>
     <br>
       <table>
@@ -25,12 +26,4 @@
       <br>
       <%= will_paginate @tickets %>
       <br>
-
-        <% else %>
-         <p> It seems you have no tickets or soemthing went wrong <p>
-      <% end %>
-
-
-
-  </body>
-</html>
+    <%end%>
