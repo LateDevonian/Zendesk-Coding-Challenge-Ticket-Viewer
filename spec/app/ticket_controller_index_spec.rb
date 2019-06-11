@@ -87,20 +87,17 @@ RSpec.describe TicketController do
     end
 
 
-    context 'error handling' do
-      #unhappy path!
-      let(:zd_parsed_response) { "thingy error" }
+    context 'creates an error message if something is wrong' do
       let(:raw_response_code) { 404 }
       let(:raw_response_success) { false }
-      let(:response_error) {"Borg Attack!"}
-      let(:response_description) {"Seperate the saucer section!"}
+      let(:parsed_response) { {"error" => "myerror", "description" => "mydescription" } }
 
       let(:err_response) do
         instance_double(
           HTTParty::Response,
           code: raw_response_code,
-          parsed_response: zd_parsed_response,
-          success?: raw_response_success
+          success?: raw_response_success,
+          parsed_response: parsed_response
         )
       end
 
@@ -111,22 +108,13 @@ RSpec.describe TicketController do
         get "/tickets"
       end
 
-        it 'returns a 404 error code' do
-          expect(last_response.status).to eq(404)
-        end
-
-        # it 'includes a parsed response error' do
-        #   expect(parsed_response.error).to eq 1
-        # end
-
-        it 'returns an successful response' do
-          expect(last_response.successful?).to eq(false)
-        end
+      describe 'successfully handles errors' do
 
         it 'goes down the fail path and sends and error' do
-          expect(last_response.body).to include("Something went wrong!")
+          expect(last_response.body).to include("Something went wrong! 404 - myerror: mydescription ")
         end
 
       end
     end
   end
+end

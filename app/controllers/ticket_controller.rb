@@ -37,7 +37,6 @@ class TicketController < ApplicationController
   end
 
   def api_get_tickets
-    #not implemented yet zendesk pagination to return >100 tickets
     raw_response = get_request
     response = raw_response.parsed_response
 
@@ -50,23 +49,22 @@ class TicketController < ApplicationController
   end
 
   def get_ticket_detail(id)
-    #only send items that exist not implemented
     raw_response = get_request(id)
     response = raw_response.parsed_response
 
     if raw_response.success?
-       @ticket = response["ticket"]
+      @ticket = response["ticket"]
     else
       handle_error(raw_response, response)
     end
   end
 
+
   def handle_error(raw_response, response)
-    status(raw_response.code)
+    status = raw_response.code
     error = response["error"]
     description = response["description"]
 
     @error = "Something went wrong! #{status} - #{error}: #{description} "
   end
-
 end
