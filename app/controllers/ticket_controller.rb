@@ -19,25 +19,21 @@ class TicketController < ApplicationController
     erb :'tickets/show_each'
   end
 
-
-  def get_request(id = nil)
+  def get_request(url)
     config = YAML.safe_load(File.open(File.expand_path('../../../config/config.yml', __FILE__)))
     base_url = "#{config['environment']}"
     user = "#{config['user']}"
     pass = "#{config['password']}"
+    url1 = "#{base_url}/#{url}"
 
-    if id == nil
-      url = "#{base_url}/tickets.json"
-    else
-      url = "#{base_url}/tickets/#{id}.json"
-    end
-
-    HTTParty.get(url, basic_auth: {username: user,
+    HTTParty.get(url1, basic_auth: {username: user,
     password: pass }, headers: {'Content-Type' => 'application/json'} )
   end
 
   def api_get_tickets
-    raw_response = get_request
+
+    url = "tickets.json"
+    raw_response = get_request(url)
     response = raw_response.parsed_response
 
     if raw_response.success?
@@ -49,7 +45,8 @@ class TicketController < ApplicationController
   end
 
   def get_ticket_detail(id)
-    raw_response = get_request(id)
+    url = "tickets/#{id}.json"
+    raw_response = get_request(url)
     response = raw_response.parsed_response
 
     if raw_response.success?
@@ -58,7 +55,6 @@ class TicketController < ApplicationController
       handle_error(raw_response, response)
     end
   end
-
 
   def handle_error(raw_response, response)
     status = raw_response.code
