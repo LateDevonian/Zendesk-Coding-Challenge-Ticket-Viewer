@@ -4,14 +4,38 @@
 
 <% if @tickets %>
   <h1>Your tickets</h1>
-    <p>Please click on the ticket subject to view ticket  <p>
-
-    <%= will_paginate @tickets %>
     <br>
+
+      <div class="paginator">
+      <p>You are on page <%= @current_page %> of <%=@max_page%></p>
+      <br>
+
+        <%if @tickets == [] %>
+         <p>You have run out of tickets!</p>
+         <a href="/tickets?page=<%=1 %>">Start of tickets =></a>
+         <br>
+         <a href="/tickets?page=<%= @max_page %>">Back to last page =></a>
+         <%else%>
+
+          <%if @current_page == 1 %>
+            <p>First Page</p>
+            <%else%>
+              <a href="/tickets?page=<%= @last_page %>">Last Page <= </a>
+          <%end%>
+          <br>
+            <%if @current_page == @max_page %>
+                <p>You have reached the end of your ticket list</p>
+              <%else%>
+              <a href="/tickets?page=<%= @next_page %>">Next Page =></a>
+            <%end%>
+        <%end%>
+
+      </div>
+
       <table>
         <thead>
           <tr>
-            <th>Subject</th>
+            <th>Ticket List</th>
           </tr>
         </thead>
 
@@ -24,6 +48,4 @@
         </tbody>
       </table>
       <br>
-      <%= will_paginate @tickets %>
-      <br>
-    <%end%>
+  <%end%>

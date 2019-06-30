@@ -6,61 +6,69 @@ require 'httparty'
 require 'will_paginate/array'
 require 'will_paginate/view_helpers/sinatra'
 require_relative './application_controller'
+require_relative '../models/send_request'
 
-class TicketController < ApplicationController
+module YourTickets
+  class TicketController < ApplicationController
+    DEFAULT_PER_PAGE = 25
+    DEFAULT_PAGE = 1
 
-  get '/tickets' do
-    api_get_tickets
-    erb :'/tickets/index'
-   end
-
-  get '/tickets/:id' do
-    get_ticket_detail(params["id"])
-    erb :'tickets/show_each'
-  end
-
-  def get_request(url)
-    config = YAML.safe_load(File.open(File.expand_path('../../../config/config.yml', __FILE__)))
-    base_url = "#{config['environment']}"
-    user = "#{config['user']}"
-    pass = "#{config['password']}"
-    url1 = "#{base_url}/#{url}"
-
-    HTTParty.get(url1, basic_auth: {username: user,
-    password: pass }, headers: {'Content-Type' => 'application/json'} )
-  end
-
-  def api_get_tickets
-
-    url = "tickets.json"
-    raw_response = get_request(url)
-    response = raw_response.parsed_response
-
-    if raw_response.success?
-      tickets = response["tickets"]
-      @tickets = tickets.paginate(:page => params[:page], :per_page => 25)
-    else
-      handle_error(raw_response, response)
+    def initialize(api_handler: Api_handler.new)
+      @api = api_handler
+      super()
     end
-  end
 
-  def get_ticket_detail(id)
-    url = "tickets/#{id}.json"
-    raw_response = get_request(url)
-    response = raw_response.parsed_response
+    get '/tickets' do
+      current_page = params[:page] || DEFAULT_PAGE
+      api_get_tickets(page: current_page, per_page: params[:per_page] || DEFAULT_PER_PAGE)
+      @next_page = current_page.to_i + 1
+      @last_page = current_page.to_i - 1
+      @current_page = current_page.to_i
 
-    if raw_response.success?
-      @ticket = response["ticket"]
-    else
-      handle_error(raw_response, response)
+      erb :'/tickets/index'
+     end
+
+    get '/tickets/:id' do
+        get_ticket_detail(params["id"])
+      erb :'tickets/show_each'
     end
-  end
 
-  def handle_error(raw_response, response)
-    status = raw_response.code
-    error = response["error"]
-    description = response["description"]
+    private
 
-    @error = "Something went wrong! #{status} - #{error}: #{description} "
+    def api_get_tickets(page: 1, per_page: 25)
+      url = "tickets.json?page=#{page}&per_page=#{per_page}"
+      raw_response = @api.get_request(url)
+      response = raw_response.parsed_response
+
+      if raw_response.success?
+        @tickets = response['tickets']
+        @count = response['count']
+        @max_page = (@count/per_page.to_f).ceil
+        @previous_page = response['previous_page']
+      else
+        handle_error(raw_response, response)
+      end
+
+    end
+
+    def get_ticket_detail(id)
+      url = "tickets/#{id}.json"
+      raw_response = @api.get_request(url)
+      response = raw_response.parsed_response
+
+      if raw_response.success?
+        @ticket = response["ticket"]
+      else
+        handle_error(raw_response, response)
+      end
+    end
+
+    def handle_error(raw_response, response)
+      status = raw_response.code
+      error = response["error"]
+      description = response["description"]
+      @error = "Something went wrong! #{status} - #{error}: #{description} "
+    end
+
   end
 end

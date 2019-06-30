@@ -3,5 +3,8 @@ class ApplicationController < Sinatra::Base
     set :views, "app/views"
     set :public_dir, "public"
   end
-  register WillPaginate::Sinatra
+
+  get '/' do
+    erb :'/tickets/about'
+  end
 end
