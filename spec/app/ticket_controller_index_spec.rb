@@ -34,9 +34,10 @@ module YourTickets
     describe 'GET /tickets' do
       #happy path of ticket index request
       context 'retrieval of tickets is successful' do
-        let(:zd_parsed_response) { {"tickets" => Array.new(26){generate_ticket} } }
+        let(:zd_parsed_response) { {"tickets" => Array.new(51){generate_ticket}, "count" => count_tickets} }
         let(:raw_response_code) { 200 }
         let(:raw_response_success) { true }
+        let(:count_tickets) {51}
 
         let(:zd_response) do
           instance_double(
@@ -44,6 +45,7 @@ module YourTickets
             code: raw_response_code,
             parsed_response: zd_parsed_response,
             success?: raw_response_success
+
           )
         end
 

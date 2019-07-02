@@ -1,11 +1,18 @@
 ENV['RACK_ENV'] = 'test'
 require 'rspec/print_failures_eagerly'
+require 'capybara/rspec'
+
+
 RSpec.configure do |config|
   #add in tag database-related example groups to rollback each test
   config.when_first_matching_example_defined(:db) do
     require_relative 'support/db'
   end
   # added for chapter 10 rspec book
+RSpec.configure do |config|
+  config.include Capybara::DSL
+end
+Capybara.default_driver = :selenium
 RSpec.configure do |c|
 #  c.fail_fast = true
   c.formatter = :documentation

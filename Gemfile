@@ -19,9 +19,12 @@ gem 'httparty', '~> 0.17.0'
 gem 'will_paginate', '~> 3.1', '>= 3.1.5'
 gem 'coderay', '1.1.2'
 gem 'byebug', '10.0.2'
+gem 'faker', '~> 1.6', '>= 1.6.6'
 
 group :test do
     gem 'rspec'
     gem 'rack-test'
+    gem 'capybara'
+    gem 'selenium-webdriver'
     gem 'database_cleaner', git: 'https://github.com/bmabey/database_cleaner.git'
 end

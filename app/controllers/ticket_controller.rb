@@ -44,7 +44,6 @@ module YourTickets
         @tickets = response['tickets']
         @count = response['count']
         @max_page = (@count/per_page.to_f).ceil
-        @previous_page = response['previous_page']
       else
         handle_error(raw_response, response)
       end
@@ -69,6 +68,5 @@ module YourTickets
       description = response["description"]
       @error = "Something went wrong! #{status} - #{error}: #{description} "
     end
-
   end
 end
