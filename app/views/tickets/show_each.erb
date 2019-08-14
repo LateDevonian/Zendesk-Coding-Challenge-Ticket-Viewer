@@ -7,6 +7,9 @@
   <h3>Ticket number: </h3><p><%= @ticket["id"]%></p>
   <h3>Subject: </h3><p><%= @ticket["subject"]%></p>
   <h3>Description: </h3><p><%= @ticket["description"]%></p>
+  <h3>Submitted id: </h3><p><%= @ticket["submitter_id"]%></p>
+  <h3>Submitted name: </h3><p><%= @ticket["submitter_name"]%></p>
+
 
   <% if @ticket["type"] != nil %>
    <h3>Type: </h3><p><%= @ticket["type"] %></p>

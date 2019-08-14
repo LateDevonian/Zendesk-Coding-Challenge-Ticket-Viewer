@@ -33,9 +33,29 @@ module YourTickets
       erb :'tickets/show_each'
     end
 
+
     private
 
-    def api_get_tickets(page: 1, per_page: 25)
+    # def get_submitter(ticket)
+    #   @tickets.each do |ticket|
+    #     submitter = ticket["submitter_id"]
+    #     return @user_name = ticket_get_name(@submitter)
+    #   end
+    # end
+
+    def ticket_get_name(sub_id)
+      url = "users/#{sub_id}.json"
+      raw_response = @api.get_request(url)
+        if raw_response.success?
+          response_parsed = raw_response.parsed_response
+          user = response_parsed["user"]
+          user["name"]
+        else
+          "Submitter name not available"
+        end
+    end
+
+    def api_get_tickets(page: 1, per_page: 2)
       url = "tickets.json?page=#{page}&per_page=#{per_page}"
       raw_response = @api.get_request(url)
       response = raw_response.parsed_response
@@ -44,11 +64,20 @@ module YourTickets
         @tickets = response['tickets']
         @count = response['count']
         @max_page = (@count/per_page.to_f).ceil
+
+        # @tickets.each do |ticket|
+        #   submitter_id = ticket["submitter_id"]
+        #   ticket["submitter_name"] =  ticket_get_name(submitter_id)
+        # end
+
+
+        # @tickets
+
       else
         handle_error(raw_response, response)
       end
-
     end
+
 
     def get_ticket_detail(id)
       url = "tickets/#{id}.json"
@@ -57,6 +86,9 @@ module YourTickets
 
       if raw_response.success?
         @ticket = response["ticket"]
+        submitter_id = ticket["submitter_id"]
+        ticket["submitter_name"] =  ticket_get_name(submitter_id)
+        @ticket
       else
         handle_error(raw_response, response)
       end

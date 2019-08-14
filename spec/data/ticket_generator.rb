@@ -5,7 +5,6 @@ module YourTickets
   class Generator
 
     def generate_ticket(id)
-
         pri = ["high", "medium", "low", nil]
         stat = %w[open, closed, unassigned, review]
 
@@ -17,11 +16,11 @@ module YourTickets
           "priority" => pri.sample,
           "status" => stat.sample,
           "updated_at" => Time.now,
-          "assignee_id" => rand(2000..3000)
+          "assignee_id" => rand(2000..2002)
         }
     end
 
-    def set_array(number)
+    def set_ticket_array(number)
       id = 1
       tickets = []
       while id <= number
@@ -30,5 +29,6 @@ module YourTickets
       end
       return tickets
     end
+
   end
 end

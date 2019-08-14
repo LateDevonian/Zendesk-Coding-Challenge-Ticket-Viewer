@@ -35,7 +35,7 @@
       <table>
         <thead>
           <tr>
-            <th>Ticket List</th>
+            <th>Ticket List</th>&nbsp;<th>Submitted id</th>
           </tr>
         </thead>
 
@@ -43,6 +43,7 @@
           <%@tickets.each do |ticket| %>
           <tr>
             <td><a href="/tickets/<%= ticket["id"] %>"><%= ticket["id"] %>&nbsp;<%= ticket["subject"]%></a></td>
+            <td><%= ticket["submitter_id"] %></td>
           </tr>
           <% end %>
         </tbody>
