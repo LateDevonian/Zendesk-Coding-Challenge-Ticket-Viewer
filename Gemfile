@@ -15,7 +15,7 @@ gem 'bcrypt'
 gem "tux"
 gem 'rspec-print_failures_eagerly'
 gem 'rest-client', '~> 2.0', '>= 2.0.2'
-gem 'httparty', '~> 0.17.0'
+gem 'httparty', '~> 0.21.0'
 gem 'will_paginate', '~> 3.1', '>= 3.1.5'
 gem 'coderay', '1.1.2'
 gem 'byebug', '10.0.2'
